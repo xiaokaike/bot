@@ -10,7 +10,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "node src/bot.js"
+    "start": "node src/index.js"
   },
   "repository": {
     "type": "git",

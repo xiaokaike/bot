@@ -1,20 +1,16 @@
-const spawn = require('child_process').spawn;
+const cluster = require('cluster');
+const CPU_COUNT = 1;
 
-let server = null;
-
-function startServer(){
-  console.log('start server');
-  server = spawn('node',['bot.js']);
-  console.log('node js pid is '+server.pid);
-  server.on('close',function(code,signal){
-    server.kill(signal);
-    server = startServer();
+if (cluster.isMaster) {
+  for (i = 0; i < CPU_COUNT; i += 1) {
+    cluster.fork();
+  }
+  cluster.on('exit', worker => {
+    // eslint-disable-next-line no-console
+    console.log(`> Worker ${worker.id} died :(`);
+    cluster.fork();
   });
-  server.on('error',function(code,signal){
-    server.kill(signal);
-    server = startServer();
-  });
-  return server;
-};
-
-startServer();
+} else if (require.main === module) {
+  // eslint-disable-next-line global-require
+  require('./bot');
+}
