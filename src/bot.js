@@ -56,7 +56,7 @@ function startBot() {
 
   bot.onText(/\/start/, async (msg, match) => {
     const chatId = msg.chat.id;
-    const text = `This bot is Don's Helper
+    const text = `Hello, This bot is Don's Helper
 
       /info - 点击查询科学上网流量
     `;
