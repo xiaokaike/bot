@@ -6,6 +6,7 @@
   "dependencies": {
     "axios": "^0.17.1",
     "date-fns": "^1.29.0",
+    "bwg": "*",
     "node-telegram-bot-api": "^0.30.0"
   },
   "devDependencies": {},

@@ -1,11 +1,10 @@
 const fs = require('fs');
 const path = require('path');
-const axios = require('axios');
+const Bandwagon = require('bwg');
 const dateFns = require('date-fns');
 const TelegramBot = require('node-telegram-bot-api');
 
-const API = 'https://api.64clouds.com/v1/getServiceInfo?veid=872365&api_key=YOUR_API_KEY_HERE';
-
+const VEID = '872365';
 let API_KEY_HERE;
 let BOT_TOKEN;
 let isInit = false;
@@ -28,11 +27,15 @@ function initConfig() {
 }
 
 async function getBwgInfo() {
-  const data = await axios(API.replace('YOUR_API_KEY_HERE', API_KEY_HERE));
-  const useData = byteToG(data.data.data_counter).toFixed(2);
-  const planData = byteToG(data.data.plan_monthly_data);
-  const nextReset = dateFns.format(data.data.data_next_reset * 1000, 'YYYY-MM-DD');
-  const chText =`🙋🙋🙋🙋 本月本月使用情况:
+  const ins = new Bandwagon({
+    veid: VEID,
+    api_key: API_KEY_HERE,
+  });
+  const serviceInfo = await ins.getServiceInfo();
+  const useData = byteToG(serviceInfo.data_counter).toFixed(2);
+  const planData = byteToG(serviceInfo.plan_monthly_data);
+  const nextReset = dateFns.format(serviceInfo.data_next_reset * 1000, 'YYYY-MM-DD');
+  const chText =`🙋 本月本月使用情况:
     总流量: ${planData}G
     已使用: ${useData}G
     到期时间: ${nextReset}
